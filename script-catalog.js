@@ -235,15 +235,8 @@ const productDetail = document.getElementById('product-detail');
  */
 function handleImageError(imgElement, productName) {
     console.warn(`No se pudo cargar la imagen: ${imgElement.src}`);
-    
-    const fallbackText = `Imagen de ${productName}`;
-    imgElement.src = `https://via.placeholder.com/300x200/393E46/EAEAEA?text=${encodeURIComponent(fallbackText)}`;
-    imgElement.alt = fallbackText;
-    imgElement.title = `No se pudo cargar la imagen de ${productName}`;
-    
-    // Indicador visual de imagen no disponible
+    imgElement.src = `https://via.placeholder.com/300x200/393E46/EAEAEA?text=${encodeURIComponent(productName)}`;
     imgElement.style.border = '2px dashed var(--rosa)';
-    imgElement.style.padding = '5px';
 }
 
 /**
@@ -274,24 +267,22 @@ function setupProductImageHover() {
                 currentImageIndex = 0;
                 hoverInterval = setInterval(() => {
                     currentImageIndex = (currentImageIndex + 1) % product.images.length;
-                    const nextImagePath = getImagePath(product.images[currentImageIndex], product.name);
+                    const nextImagePath = product.images[currentImageIndex]; // ← CAMBIO AQUÍ
                     
-                    // Transición suave
                     imageElement.style.opacity = '0.7';
                     setTimeout(() => {
                         imageElement.src = nextImagePath;
                         imageElement.style.opacity = '1';
                     }, 150);
                     
-                }, 2000); // Cambiar cada 2 segundos
+                }, 2000);
             }
         });
         
         card.addEventListener('mouseleave', () => {
             if (hoverInterval) {
                 clearInterval(hoverInterval);
-                // Restaurar primera imagen
-                const firstImagePath = getImagePath(product.images[0], product.name);
+                const firstImagePath = product.images[0]; // ← CAMBIO AQUÍ
                 imageElement.style.opacity = '0.7';
                 setTimeout(() => {
                     imageElement.src = firstImagePath;
@@ -409,9 +400,9 @@ function displaySuggestions(suggestions, query) {
     
     suggestionsContainer.innerHTML = suggestions.map(product => `
         <div class="suggestion-item" data-id="${product.id}">
-            <img src="${getImagePath(product.images, product.name, product.category)}" 
+            <img src="${firstImage}"
                  alt="${product.name}"
-                 onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}', '${product.category}')">
+                 onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}')">
             <div class="suggestion-info">
                 <div class="suggestion-name">${highlightText(product.name, query)}</div>
                 <div class="suggestion-category">${formatCategoryName(product.category)}</div>
@@ -657,7 +648,7 @@ function createProductElement(product) {
             <img src="${imagePath}" 
                  alt="${product.name} - ${formatCategoryName(product.category)}" 
                  class="product-image"
-                 onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}', '${product.category}')"
+                 onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}')"
                  title="${product.name} - ${product.description}">
             <div class="image-indicator" style="display: ${Array.isArray(product.images) && product.images.length > 1 ? 'block' : 'none'};">
                 ${Array.isArray(product.images) ? product.images.length : 1} imágenes
@@ -989,13 +980,13 @@ function updateCartUI() {
         const itemTotal = item.price * item.quantity;
         total += itemTotal;
         
-        const imagePath = getImagePath(item.image, item.name, 'producto');
+        const imagePath = item.image;
         
         const cartItem = document.createElement('div');
         cartItem.className = 'cart-item';
         cartItem.innerHTML = `
             <img src="${imagePath}" alt="${item.name}" class="cart-item-image"
-                 onerror="handleImageError(this, '${item.name.replace(/'/g, "\\'")}', 'producto')">
+                 onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}')">
             <div class="cart-item-details">
                 <h4 class="cart-item-title">${item.name}</h4>
                 <div class="cart-item-price">$${item.price.toFixed(2)}</div>
@@ -1214,22 +1205,22 @@ function openProductDetail(productId) {
     if (!product) return;
     
     const productImages = Array.isArray(product.images) ? product.images : [product.image];
-    const mainImagePath = getImagePath(productImages[0], product.name, product.category);
+    const mainImagePath = productImages[0];
     
     productDetail.innerHTML = `
         <div class="product-detail-container">
             <div class="product-detail-main">
                 <div class="product-image-gallery">
                     <img src="${mainImagePath}" alt="${product.name}" class="product-detail-image active"
-                         onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}', '${product.category}')">
+                         onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}')">
                     ${productImages.length > 1 ? `
                     <div class="image-thumbnails">
                         ${productImages.map((img, index) => `
-                            <img src="${getImagePath(img, product.name, product.category)}" 
+                            <img src="${img}"
                                  alt="${product.name} - Vista ${index + 1}"
                                  class="thumbnail ${index === 0 ? 'active' : ''}"
                                  data-index="${index}"
-                                 onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")} - Vista ${index + 1}', '${product.category}')">
+                                 onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}')">
                         `).join('')}
                     </div>
                     ` : ''}
@@ -1583,4 +1574,5 @@ function setupEventListeners() {
     });
 
 }
+
 
