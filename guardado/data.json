@@ -1,0 +1,184 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Laptop Gaming ASUS ROG",
+      "description": "Laptop gaming de alto rendimiento con RTX 4070 y procesador Intel i9.",
+      "detailedDescription": "La ASUS ROG Strix es la laptop gaming definitiva para jugadores exigentes. Equipada con un procesador Intel Core i9 de 13ª generación y una tarjeta gráfica NVIDIA GeForce RTX 4070, ofrece un rendimiento excepcional en los juegos más demandantes. Su pantalla QHD de 15.6 pulgadas con tasa de refresco de 240Hz garantiza una experiencia visual fluida y nítida.",
+      "price": 1899.99,
+      "category": "laptops",
+      "brand": "asus",
+      "image": "https://via.placeholder.com/300x200?text=Laptop+Gaming",
+      "rating": 4.8,
+      "featured": true,
+      "specifications": [
+        "Procesador: Intel Core i9-13900H",
+        "Tarjeta gráfica: NVIDIA GeForce RTX 4070 8GB",
+        "RAM: 32GB DDR5",
+        "Almacenamiento: 1TB SSD NVMe",
+        "Pantalla: 15.6\" QHD 240Hz",
+        "Sistema operativo: Windows 11 Home"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "iPhone 15 Pro",
+      "description": "El último smartphone de Apple con cámara profesional y chip A17 Pro.",
+      "detailedDescription": "El iPhone 15 Pro redefine lo que es posible en un smartphone. Con su revolucionario chip A17 Pro, cámara triple de 48MP y diseño de titanio, ofrece un rendimiento y durabilidad sin precedentes. La Dynamic Island proporciona una forma completamente nueva de interactuar con tu iPhone.",
+      "price": 1199.99,
+      "category": "smartphones",
+      "brand": "apple",
+      "image": "https://via.placeholder.com/300x200?text=iPhone+15+Pro",
+      "rating": 4.9,
+      "featured": true,
+      "specifications": [
+        "Chip: A17 Pro",
+        "Pantalla: 6.1\" Super Retina XDR",
+        "Cámara: Triple 48MP + 12MP + 12MP",
+        "Almacenamiento: 256GB",
+        "Batería: Hasta 23 horas de reproducción de video",
+        "Resistencia: IP68"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "RTX 4090 Founders Edition",
+      "description": "Tarjeta gráfica de última generación para gaming y creación de contenido.",
+      "detailedDescription": "La NVIDIA GeForce RTX 4090 es la GPU más avanzada del mundo, diseñada para jugadores y creadores. Con la arquitectura NVIDIA Ada Lovelace, ofrece un salto monumental en rendimiento y eficiencia con trazado de rayos y IA. Experimenta juegos con gráficos ultrarealistas y un rendimiento increíblemente rápido.",
+      "price": 1599.99,
+      "category": "components",
+      "brand": "nvidia",
+      "image": "https://via.placeholder.com/300x200?text=RTX+4090",
+      "rating": 4.7,
+      "featured": true,
+      "specifications": [
+        "Arquitectura: NVIDIA Ada Lovelace",
+        "Memoria: 24GB GDDR6X",
+        "Velocidad: 2.52 GHz",
+        "Conectores: 3x DisplayPort, 1x HDMI",
+        "Fuente recomendada: 850W",
+        "Refrigeración: Vapor chamber avanzada"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Samsung Galaxy S24 Ultra",
+      "description": "Smartphone premium con S Pen integrado y cámara de 200MP.",
+      "detailedDescription": "El Galaxy S24 Ultra lleva la productividad móvil al siguiente nivel con el S Pen integrado y una cámara de 200MP que captura detalles asombrosos. Su pantalla Dynamic AMOLED 2X de 6.8 pulgadas ofrece colores vibrantes y brillo excepcional, incluso bajo la luz solar directa.",
+      "price": 1299.99,
+      "category": "smartphones",
+      "brand": "samsung",
+      "image": "https://via.placeholder.com/300x200?text=Galaxy+S24",
+      "rating": 4.6,
+      "featured": false,
+      "specifications": [
+        "Procesador: Snapdragon 8 Gen 3",
+        "Pantalla: 6.8\" Dynamic AMOLED 2X",
+        "Cámara: 200MP + 50MP + 12MP + 10MP",
+        "Almacenamiento: 512GB",
+        "S Pen: Integrado",
+        "Batería: 5000mAh"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "MSI Katana 15",
+      "description": "Laptop gaming con RTX 4060 y procesador Intel i7 de 13ª generación.",
+      "detailedDescription": "La MSI Katana 15 combina un diseño elegante con un rendimiento gaming excepcional. Equipada con una RTX 4060 y procesador Intel Core i7, es la compañera perfecta para jugadores que buscan potencia y portabilidad. Su teclado per-key RGB personalizable completa la experiencia gaming.",
+      "price": 1399.99,
+      "category": "laptops",
+      "brand": "msi",
+      "image": "https://via.placeholder.com/300x200?text=MSI+Katana",
+      "rating": 4.5,
+      "featured": false,
+      "specifications": [
+        "Procesador: Intel Core i7-13620H",
+        "Tarjeta gráfica: NVIDIA GeForce RTX 4060 8GB",
+        "RAM: 16GB DDR5",
+        "Almacenamiento: 1TB SSD NVMe",
+        "Pantalla: 15.6\" FHD 144Hz",
+        "Teclado: Per-key RGB"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Teclado Mecánico Razer",
+      "description": "Teclado gaming mecánico con switches verdes y retroiluminación RGB.",
+      "detailedDescription": "El teclado mecánico Razer BlackWidow V4 ofrece la experiencia táctil y auditiva definitiva con sus switches verdes mecánicos. Con iluminación RGB Chroma personalizable y construcción duradera, es el teclado preferido por jugadores profesionales en todo el mundo.",
+      "price": 129.99,
+      "category": "accessories",
+      "brand": "razer",
+      "image": "https://via.placeholder.com/300x200?text=Teclado+Razer",
+      "rating": 4.4,
+      "featured": false,
+      "specifications": [
+        "Switches: Razer Green Mechanical",
+        "Iluminación: RGB Chroma",
+        "Teclas multimedia: Dedicadas",
+        "Cable: Desmontable USB-C",
+        "Construcción: Aluminio",
+        "Compatibilidad: PC, PS5, Xbox Series X/S"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Monitor Gaming 27\" 144Hz",
+      "description": "Monitor gaming con tasa de refresco de 144Hz y resolución QHD.",
+      "detailedDescription": "Este monitor gaming de 27 pulgadas ofrece una experiencia visual inmersiva con resolución QHD y tasa de refresco de 144Hz. Tecnología AMD FreeSync Premium elimina el tearing y stuttering para una jugabilidad suave. Ideal para juegos competitivos y contenido multimedia.",
+      "price": 349.99,
+      "category": "gaming",
+      "brand": "asus",
+      "image": "https://via.placeholder.com/300x200?text=Monitor+Gaming",
+      "rating": 4.3,
+      "featured": false,
+      "specifications": [
+        "Tamaño: 27\"",
+        "Resolución: QHD (2560x1440)",
+        "Tasa de refresco: 144Hz",
+        "Tiempo de respuesta: 1ms",
+        "Tecnología: AMD FreeSync Premium",
+        "Conectores: 2x HDMI, 1x DisplayPort"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "MacBook Air M3",
+      "description": "Laptop ultradelgada con chip M3 de Apple y pantalla Retina.",
+      "detailedDescription": "La MacBook Air con chip M3 lleva el rendimiento y la portabilidad a nuevos niveles. Incredíblemente delgada y ligera, ofrece hasta 18 horas de batería y un rendimiento que supera a muchas laptops con procesadores Intel. Perfecta para trabajo, creatividad y entretenimiento.",
+      "price": 1099.99,
+      "category": "laptops",
+      "brand": "apple",
+      "image": "https://via.placeholder.com/300x200?text=MacBook+Air",
+      "rating": 4.8,
+      "featured": false,
+      "specifications": [
+        "Chip: Apple M3 con CPU 8-core",
+        "Pantalla: 13.6\" Liquid Retina",
+        "Memoria: 8GB unificada",
+        "Almacenamiento: 256GB SSD",
+        "Batería: Hasta 18 horas",
+        "Sistema operativo: macOS"
+      ]
+    }
+  ],
+  "news": [
+    {
+      "id": 1,
+      "title": "NVIDIA anuncia la nueva serie RTX 50",
+      "content": "NVIDIA ha presentado oficialmente su nueva generación de tarjetas gráficas con mejoras significativas en rendimiento y eficiencia energética. Las nuevas RTX 50 series prometen hasta un 70% más de rendimiento que la generación anterior.",
+      "image": "https://via.placeholder.com/600x300?text=RTX+50+Series"
+    },
+    {
+      "id": 2,
+      "title": "Apple revela iOS 18 con inteligencia artificial integrada",
+      "content": "El nuevo sistema operativo de Apple incluye funciones de IA avanzadas que transformarán la forma en que interactuamos con nuestros dispositivos. Siri se ha rediseñado por completo con capacidades de lenguaje natural mejoradas.",
+      "image": "https://via.placeholder.com/600x300?text=iOS+18+AI"
+    },
+    {
+      "id": 3,
+      "title": "Los procesadores Quantum marcan un antes y después",
+      "content": "La nueva arquitectura de procesadores promete revolucionar el mundo de la computación con velocidades nunca antes vistas. Empresas como Intel y AMD ya han anunciado sus primeras líneas de productos basados en esta tecnología.",
+      "image": "https://via.placeholder.com/600x300?text=Quantum+Processors"
+    }
+  ]
+}

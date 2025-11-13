@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Completo - TesLabs</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">TesLabs</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="catalogo.html" class="active">Catálogo</a></li>
+                    <li><a href="index.html#noticias">Noticias</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div class="search-bar">
+                    <input type="text" placeholder="Buscar productos..." id="search-input">
+                    <button id="search-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 21L16.514 16.506L21 21ZM19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="cart-icon" id="cart-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.4 5.2 16.4H17M17 13V16.4M9 19C9 19.6 8.6 20 8 20C7.4 20 7 19.6 7 19C7 18.4 7.4 18 8 18C8.6 18 9 18.4 9 19ZM17 19C17 19.6 16.6 20 16 20C15.4 20 15 19.6 15 19C15 18.4 15.4 18 16 18C16.6 18 17 18.4 17 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="cart-count" id="cart-count">0</span>
+                </div>
+                <button class="btn btn-primary btn-small" id="login-btn">Iniciar Sesión</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section del Catálogo -->
+    <section class="hero">
+        <div class="container">
+            <h1>Catálogo Completo</h1>
+            <p>Explora todos nuestros productos tecnológicos. Filtra por categoría, precio o marca para encontrar exactamente lo que necesitas.</p>
+        </div>
+    </section>
+
+    <!-- Catálogo con Filtros -->
+    <section class="container products-section">
+        <aside class="filters">
+            <h2 class="filter-title">Filtros</h2>
+            
+            <div class="filter-group">
+                <h3>Categorías</h3>
+                <div class="filter-options" id="category-filters">
+                    <!-- Las categorías se cargarán con JavaScript -->
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <h3>Precio</h3>
+                <div class="filter-options" id="price-filters">
+                    <!-- Los filtros de precio se cargarán con JavaScript -->
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <h3>Marca</h3>
+                <div class="filter-options" id="brand-filters">
+                    <!-- Las marcas se cargarán con JavaScript -->
+                </div>
+            </div>
+            
+            <button class="btn" id="clear-filters" style="margin-top: 10px; background: #444; color: #fff; width: 100%;">Limpiar Filtros</button>
+        </aside>
+        
+        <div class="products-container">
+            <div class="catalog-header">
+                <h2 class="section-title">Todos los Productos</h2>
+                <div class="results-count" id="results-count"></div>
+            </div>
+            <div class="products-grid" id="all-products">
+                <!-- Todos los productos se cargarán con JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección FAQ -->
+    <section class="faq-section container" id="faq">
+        <h2 class="section-title">Preguntas Frecuentes</h2>
+        
+        <div class="faq-categories">
+            <button class="faq-category-btn all active" data-category="all">Todas</button>
+            <button class="faq-category-btn" data-category="pedidos">Pedidos</button>
+            <button class="faq-category-btn" data-category="pagos">Pagos</button>
+            <button class="faq-category-btn" data-category="envios">Envíos</button>
+            <button class="faq-category-btn" data-category="productos">Productos</button>
+        </div>
+        
+        <div class="faq-container">
+            <div class="faq-item" data-categories="pedidos,pagos">
+                <button class="faq-question">
+                    ¿Cómo puedo realizar un pedido?
+                </button>
+                <div class="faq-answer">
+                    <p>Para realizar un pedido, simplemente:</p>
+                    <ol>
+                        <li>Navega por nuestro catálogo y selecciona los productos que deseas</li>
+                        <li>Agrega los productos al carrito de compras</li>
+                        <li>Ve al carrito y procede al checkout</li>
+                        <li>Completa tus datos de envío y selecciona método de pago</li>
+                        <li>Confirma tu pedido y ¡listo!</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-categories="pagos">
+                <button class="faq-question">
+                    ¿Qué métodos de pago aceptan?
+                </button>
+                <div class="faq-answer">
+                    <p>Aceptamos los siguientes métodos de pago:</p>
+                    <ul>
+                        <li>Tarjetas de crédito y débito (Visa, MasterCard, American Express)</li>
+                        <li>PayPal</li>
+                        <li>Transferencias bancarias</li>
+                        <li>Pago contra entrega (solo en ciertas zonas)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-categories="envios">
+                <button class="faq-question">
+                    ¿Cuánto tiempo tarda el envío?
+                </button>
+                <div class="faq-answer">
+                    <p>Los tiempos de envío varían según tu ubicación:</p>
+                    <ul>
+                        <li><strong>Ciudad de México:</strong> 1-2 días hábiles</li>
+                        <li><strong>Interior de la República:</strong> 3-5 días hábiles</li>
+                        <li><strong>Envíos internacionales:</strong> 7-14 días hábiles</li>
+                    </ul>
+                    <p>Los pedidos realizados antes de las 2:00 PM se procesan el mismo día.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-categories="productos">
+                <button class="faq-question">
+                    ¿Ofrecen garantía en los productos?
+                </button>
+                <div class="faq-answer">
+                    <p>Sí, todos nuestros productos cuentan con garantía:</p>
+                    <ul>
+                        <li><strong>Laptops y PCs:</strong> 2 años de garantía</li>
+                        <li><strong>Smartphones y tablets:</strong> 1 año de garantía</li>
+                        <li><strong>Componentes:</strong> 3 años de garantía</li>
+                        <li><strong>Accesorios:</strong> 6 meses de garantía</li>
+                    </ul>
+                    <p>La garantía cubre defectos de fabricación y malfuncionamiento.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-categories="pedidos">
+                <button class="faq-question">
+                    ¿Puedo modificar o cancelar mi pedido?
+                </button>
+                <div class="faq-answer">
+                    <p>Sí, puedes modificar o cancelar tu pedido bajo estas condiciones:</p>
+                    <ul>
+                        <li><strong>Modificaciones:</strong> Hasta 1 hora después de realizado el pedido</li>
+                        <li><strong>Cancelaciones:</strong> Antes de que el pedido sea enviado a logística</li>
+                        <li><strong>Cambios:</strong> Contacta a nuestro servicio al cliente inmediatamente</li>
+                    </ul>
+                    <p>Una vez que el pedido esté en camino, deberás esperar a recibirlo y proceder con una devolución si es necesario.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-categories="envios">
+                <button class="faq-question">
+                    ¿Realizan envíos internacionales?
+                </button>
+                <div class="faq-answer">
+                    <p>Sí, realizamos envíos a la mayoría de países. Algunos detalles importantes:</p>
+                    <ul>
+                        <li>Los costos de envío internacional varían según el destino</li>
+                        <li>Los tiempos de entrega son de 7-14 días hábiles</li>
+                        <li>Pueden aplicarse impuestos de importación según el país destino</li>
+                        <li>Aceptamos pagos en USD y EUR para pedidos internacionales</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-categories="productos">
+                <button class="faq-question">
+                    ¿Los productos incluyen accesorios?
+                </button>
+                <div class="faq-answer">
+                    <p>Todos nuestros productos incluyen lo siguiente:</p>
+                    <ul>
+                        <li><strong>Dispositivos electrónicos:</strong> Cargador, cable USB, manual de usuario</li>
+                        <li><strong>Laptops y PCs:</strong> Adaptador de corriente, documentación, software básico</li>
+                        <li><strong>Componentes:</strong> Cables necesarios, tornillos, manual de instalación</li>
+                        <li><strong>Accesorios:</strong> Empaque original y documentación</li>
+                    </ul>
+                    <p>Si algún accesorio falta, contacta inmediatamente a nuestro servicio al cliente.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-categories="pagos">
+                <button class="faq-question">
+                    ¿Es seguro comprar en su tienda online?
+                </button>
+                <div class="faq-answer">
+                    <p>¡Absolutamente! Tu seguridad es nuestra prioridad:</p>
+                    <ul>
+                        <li>Utilizamos SSL de 256-bit para encriptar toda la información</li>
+                        <li>No almacenamos datos de tarjetas de crédito en nuestros servidores</li>
+                        <li>Trabajamos con pasarelas de pago certificadas (Visa, MasterCard, PayPal)</li>
+                        <li>Certificación PCI DSS compliant para procesamiento de pagos</li>
+                        <li>Política estricta de privacidad y protección de datos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Carrito de Compras -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-header">
+            <h2 class="cart-title">Tu Carrito</h2>
+            <button class="close-cart" id="close-cart">×</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- Los productos del carrito se cargarán con JavaScript -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total">$0.00</span>
+            </div>
+            <button class="btn checkout-btn" id="checkout-btn">Proceder al Pago</button>
+        </div>
+    </div>
+
+    <!-- Modal de Autenticación -->
+    <div class="auth-modal" id="auth-modal">
+        <div class="auth-content">
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Iniciar Sesión</div>
+                <div class="auth-tab" data-tab="register">Registrarse</div>
+            </div>
+            
+            <form class="auth-form active" id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Correo Electrónico</label>
+                    <input type="email" id="login-email" required>
+                    <div class="form-error" id="login-email-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <input type="password" id="login-password" required>
+                    <div class="form-error" id="login-password-error"></div>
+                </div>
+                <button type="submit" class="btn auth-submit">Iniciar Sesión</button>
+            </form>
+            
+            <form class="auth-form" id="register-form">
+                <div class="form-group">
+                    <label for="register-name">Nombre Completo</label>
+                    <input type="text" id="register-name" required>
+                    <div class="form-error" id="register-name-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Correo Electrónico</label>
+                    <input type="email" id="register-email" required>
+                    <div class="form-error" id="register-email-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Contraseña</label>
+                    <input type="password" id="register-password" required>
+                    <div class="form-error" id="register-password-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm">Confirmar Contraseña</label>
+                    <input type="password" id="register-confirm" required>
+                    <div class="form-error" id="register-confirm-error"></div>
+                </div>
+                <button type="submit" class="btn auth-submit">Registrarse</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Detalle de Producto -->
+    <div class="product-modal" id="product-modal">
+        <div class="product-modal-content">
+            <button class="close-product-modal" id="close-product-modal">×</button>
+            <div class="product-detail" id="product-detail">
+                <!-- El detalle del producto se cargará con JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contacto">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Laboratorio de Tesla</h3>
+                    <p>Tu tienda de confianza para tecnología de vanguardia. Ofrecemos los mejores productos al mejor precio.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="catalogo.html">Catálogo</a></li>
+                        <li><a href="index.html#noticias">Noticias</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Ayuda</h3>
+                    <ul>
+                        <li><a href="#faq" class="faq-link">Preguntas Frecuentes</a></li>
+                        <li><a href="#faq" class="faq-link" data-category="pedidos">Cómo Comprar</a></li>
+                        <li><a href="#faq" class="faq-link" data-category="envios">Envíos y Entregas</a></li>
+                        <li><a href="#faq" class="faq-link" data-category="pagos">Métodos de Pago</a></li>
+                        <li><a href="#faq" class="faq-link" data-category="productos">Garantías</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contacto</h3>
+                    <ul>
+                        <li>Email: info@laboratoriodetesla.com</li>
+                        <li>Teléfono: +1 234 567 890</li>
+                        <li>Dirección: Av. Tecnología 123, Ciudad</li>
+                        <li>Horario: Lunes a Viernes 9:00 - 18:00</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Laboratorio de Tesla. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script-catalog.js"></script>
+</body>
+</html>
