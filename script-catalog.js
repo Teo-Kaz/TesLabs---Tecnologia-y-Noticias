@@ -8,9 +8,9 @@ const backupProducts = [
         category: "laptops",
         brand: "asus",
         images: [
-            "GFRTX.jpeg",
-            "GFRTX2.jpeg", 
-            "GFRTX3.jpg"
+            "imagenes/products/GFRTX.jpeg",
+            "imagenes/products/GFRTX2.jpeg", 
+            "imagenes/products/GFRTX3.jpg"
         ],
         rating: 4.8,
         featured: true,
@@ -32,9 +32,9 @@ const backupProducts = [
         category: "smartphones",
         brand: "apple",
         images: [
-            "I15.jpeg",
-            "I152.jpeg",
-            "I153.jpeg"
+            "imagenes/products/I15.jpeg",
+            "imagenes/products/I152.jpeg",
+            "imagenes/products/I153.jpeg"
         ],
         rating: 4.9,
         featured: true,
@@ -56,9 +56,9 @@ const backupProducts = [
         category: "components",
         brand: "nvidia",
         images: [
-            "RTX4.jpg",
-            "RTX42.jpg",
-            "RTX43.jpg"
+            "imagenes/products/RTX4.jpg",
+            "imagenes/products/RTX42.jpg",
+            "imagenes/products/RTX43.jpg"
         ],
         rating: 4.7,
         featured: true,
@@ -80,8 +80,8 @@ const backupProducts = [
         category: "smartphones",
         brand: "samsung",
         images: [
-            "SG24.jpeg",
-            "SG243.jpeg"
+            "imagenes/products/SG24.jpeg",
+            "imagenes/products/SG243.jpeg"
         ],
         rating: 4.6,
         featured: false,
@@ -103,8 +103,8 @@ const backupProducts = [
         category: "laptops",
         brand: "msi",
         images: [
-            "MSK.jpg",
-            "MSK.jpg"
+            "imagenes/products/MSK.jpg",
+            "imagenes/products/MSK.jpg"
         ],
         rating: 4.5,
         featured: false,
@@ -126,9 +126,9 @@ const backupProducts = [
         category: "accessories",
         brand: "razer",
         images: [
-            "TEMR.jpeg",
-            "TEMR.jpeg",
-            "TEMR.jpeg"
+            "imagenes/products/TEMR.jpeg",
+            "imagenes/products/TEMR.jpeg",
+            "imagenes/products/TEMR.jpeg"
         ],
         rating: 4.4,
         featured: false,
@@ -150,8 +150,8 @@ const backupProducts = [
         category: "gaming",
         brand: "asus",
         images: [
-            "MNG.jpg",
-            "MNG.jpg"
+            "imagenes/products/MNG.jpg",
+            "imagenes/products/MNG.jpg"
         ],
         rating: 4.3,
         featured: false,
@@ -173,9 +173,9 @@ const backupProducts = [
         category: "laptops",
         brand: "apple",
         images: [
-            "MAC.jpg",
-            "MAC.jpg",
-            "MAC.jpg"
+            "imagenes/products/MAC.jpg",
+            "imagenes/products/MAC.jpg",
+            "imagenes/products/MAC.jpg"
         ],
         rating: 4.8,
         featured: false,
@@ -228,28 +228,7 @@ const productDetail = document.getElementById('product-detail');
 
 // ========== SISTEMA SIMPLIFICADO DE IMÁGENES ==========
 
-/**
- * Función simplificada para obtener la ruta de imagen
- */
-function getImagePath(imagePath, productName, category) {
-    // Si no hay imagen, usar placeholder
-    if (!imagePath) {
-        return `https://via.placeholder.com/300x200/393E46/EAEAEA?text=${encodeURIComponent(productName)}`;
-    }
-    
-    // Si ya es una URL completa (http/https), usarla directamente
-    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-        return imagePath;
-    }
-    
-    // Si ya incluye la carpeta completa, usarla
-    if (imagePath.includes('imagenes/') || imagePath.includes('/')) {
-        return imagePath;
-    }
-    
-    // Para nombres simples, construir la ruta completa
-    return `imagenes/products/${imagePath}`;
-}
+
 
 /**
  * Manejo de errores de imagen simplificado
@@ -671,7 +650,7 @@ function createProductElement(product) {
     productDiv.className = 'product-card';
     
     const firstImage = Array.isArray(product.images) ? product.images[0] : product.image;
-    const imagePath = getImagePath(firstImage, product.name, product.category);
+    const imagePath = firstImage || "https://via.placeholder.com/300x200";
     
     productDiv.innerHTML = `
         <div class="product-image-container">
@@ -1604,3 +1583,4 @@ function setupEventListeners() {
     });
 
 }
+
