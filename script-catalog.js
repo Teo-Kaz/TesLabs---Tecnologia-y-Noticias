@@ -1,7 +1,7 @@
 const backupProducts = [
     {
         id: 1,
-        name: "RTX  Gamming",
+        name: "RTX Gaming",
         description: "Tarjeta grafica",
         detailedDescription: "Tarjeta Grafica",
         price: 1899.99,
@@ -226,17 +226,70 @@ const productModal = document.getElementById('product-modal');
 const closeProductModal = document.getElementById('close-product-modal');
 const productDetail = document.getElementById('product-detail');
 
-// ========== SISTEMA SIMPLIFICADO DE IMÁGENES ==========
-
-
+// ========== SISTEMA MEJORADO DE MANEJO DE IMÁGENES ==========
 
 /**
- * Manejo de errores de imagen simplificado
+ * Obtiene la ruta de imagen corregida
  */
-function handleImageError(imgElement, productName) {
+function getImagePath(imagePath, productName, category) {
+    // Si la imagen es un array, tomar la primera
+    if (Array.isArray(imagePath)) {
+        imagePath = imagePath[0];
+    }
+    
+    // Si no hay imagen o la ruta no es válida, usar placeholder
+    if (!imagePath || typeof imagePath !== 'string') {
+        return generatePlaceholderImage(productName, category);
+    }
+    
+    // Verificar si la imagen existe localmente
+    if (imagePath.startsWith('imagenes/') || imagePath.startsWith('./imagenes/')) {
+        // Intentar cargar la imagen local
+        return imagePath;
+    }
+    
+    // Si es una URL externa, usarla directamente
+    if (imagePath.startsWith('http')) {
+        return imagePath;
+    }
+    
+    // Por defecto, usar placeholder
+    return generatePlaceholderImage(productName, category);
+}
+
+/**
+ * Genera una imagen de placeholder con información del producto
+ */
+function generatePlaceholderImage(productName, category) {
+    const colors = {
+        laptops: '4A90E2',
+        smartphones: '50E3C2',
+        components: 'B8E986',
+        accessories: 'F5A623',
+        gaming: 'BD10E0'
+    };
+    
+    const color = colors[category] || '393E46';
+    const text = encodeURIComponent(productName.substring(0, 15));
+    return `https://via.placeholder.com/300x200/${color}/FFFFFF?text=${text}`;
+}
+
+/**
+ * Manejo de errores de imagen mejorado
+ */
+function handleImageError(imgElement, productName, category = 'default') {
     console.warn(`No se pudo cargar la imagen: ${imgElement.src}`);
-    imgElement.src = `https://via.placeholder.com/300x200/393E46/EAEAEA?text=${encodeURIComponent(productName)}`;
+    
+    // Generar placeholder apropiado
+    const placeholderUrl = generatePlaceholderImage(productName, category);
+    
+    // Cambiar la fuente y agregar estilo indicador
+    imgElement.src = placeholderUrl;
     imgElement.style.border = '2px dashed var(--rosa)';
+    imgElement.style.background = 'var(--bg-light)';
+    
+    // Prevenir bucles de error
+    imgElement.onerror = null;
 }
 
 /**
@@ -244,12 +297,22 @@ function handleImageError(imgElement, productName) {
  */
 function setupImageErrorHandlers() {
     document.querySelectorAll('.product-image, .cart-item-image, .product-detail-image, .thumbnail').forEach(img => {
-        const productName = img.alt || 'Producto';
-        img.onerror = () => handleImageError(img, productName);
+        const productCard = img.closest('.product-card, .cart-item, .product-detail-container');
+        let productName = img.alt || 'Producto';
+        let category = 'default';
+        
+        if (productCard) {
+            const categoryElement = productCard.querySelector('[data-category]');
+            if (categoryElement) {
+                category = categoryElement.dataset.category || 'default';
+            }
+        }
+        
+        img.onerror = () => handleImageError(img, productName, category);
     });
 }
 
-// ========== SISTEMA DE MÚLTIPLES IMÁGENES SIMPLIFICADO ==========
+// ========== SISTEMA DE MÚLTIPLES IMÁGENES MEJORADO ==========
 
 function setupProductImageHover() {
     document.querySelectorAll('.product-card').forEach(card => {
@@ -267,7 +330,7 @@ function setupProductImageHover() {
                 currentImageIndex = 0;
                 hoverInterval = setInterval(() => {
                     currentImageIndex = (currentImageIndex + 1) % product.images.length;
-                    const nextImagePath = product.images[currentImageIndex]; // ← CAMBIO AQUÍ
+                    const nextImagePath = getImagePath(product.images[currentImageIndex], product.name, product.category);
                     
                     imageElement.style.opacity = '0.7';
                     setTimeout(() => {
@@ -282,7 +345,7 @@ function setupProductImageHover() {
         card.addEventListener('mouseleave', () => {
             if (hoverInterval) {
                 clearInterval(hoverInterval);
-                const firstImagePath = product.images[0]; // ← CAMBIO AQUÍ
+                const firstImagePath = getImagePath(product.images[0], product.name, product.category);
                 imageElement.style.opacity = '0.7';
                 setTimeout(() => {
                     imageElement.src = firstImagePath;
@@ -293,7 +356,7 @@ function setupProductImageHover() {
     });
 }
 
-// ========== INICIALIZACIÓN SIMPLIFICADA ==========
+// ========== INICIALIZACIÓN MEJORADA ==========
 
 document.addEventListener('DOMContentLoaded', function() {
     loadData();
@@ -322,269 +385,22 @@ async function loadData() {
         console.warn('Error cargando datos JSON, usando datos de respaldo:', error);
         products = backupProducts;
     }
+    
+    // Procesar imágenes para asegurar rutas válidas
+    products = products.map(product => {
+        return {
+            ...product,
+            // Asegurar que images sea un array y tenga rutas válidas
+            images: (product.images || [product.image]).map(img => 
+                getImagePath(img, product.name, product.category)
+            )
+        };
+    });
     
     renderAllProducts();
     renderFilters();
     updateResultsCount();
     setupProductImageHover();
-    showLoading(false);
-}
-
-// ========== SISTEMA DE BÚSQUEDA PREDICTIVA ==========
-
-let searchTimeout;
-let currentSuggestions = [];
-
-function setupPredictiveSearch() {
-    const searchInput = document.getElementById('search-input');
-    const searchContainer = searchInput.parentElement;
-    
-    // Crear contenedor de sugerencias
-    const suggestionsContainer = document.createElement('div');
-    suggestionsContainer.className = 'search-suggestions';
-    searchContainer.appendChild(suggestionsContainer);
-    
-    // Event listeners mejorados
-    searchInput.addEventListener('input', handleSearchInput);
-    searchInput.addEventListener('focus', showSuggestions);
-    searchInput.addEventListener('blur', hideSuggestions);
-    
-    // Navegación con teclado
-    searchInput.addEventListener('keydown', handleSearchNavigation);
-}
-
-function handleSearchInput(e) {
-    const query = e.target.value.trim();
-    
-    clearTimeout(searchTimeout);
-    
-    if (query.length < 2) {
-        hideSuggestions();
-        return;
-    }
-    
-    searchTimeout = setTimeout(() => {
-        searchProducts(query);
-    }, 300);
-}
-
-function searchProducts(query) {
-    const searchTerm = query.toLowerCase();
-    
-    // Búsqueda en productos cargados
-    const results = products.filter(product => {
-        const nameMatch = product.name.toLowerCase().includes(searchTerm);
-        const descMatch = product.description.toLowerCase().includes(searchTerm);
-        const categoryMatch = product.category.toLowerCase().includes(searchTerm);
-        const brandMatch = product.brand.toLowerCase().includes(searchTerm);
-        
-        return nameMatch || descMatch || categoryMatch || brandMatch;
-    }).slice(0, 8); // Limitar a 8 resultados
-    
-    currentSuggestions = results;
-    displaySuggestions(results, query);
-}
-
-function displaySuggestions(suggestions, query) {
-    const suggestionsContainer = document.querySelector('.search-suggestions');
-    
-    if (suggestions.length === 0) {
-        suggestionsContainer.innerHTML = `
-            <div class="suggestion-item no-results">
-                <span>No se encontraron productos para "${query}"</span>
-            </div>
-        `;
-        suggestionsContainer.classList.add('show');
-        return;
-    }
-    
-    suggestionsContainer.innerHTML = suggestions.map(product => `
-        <div class="suggestion-item" data-id="${product.id}">
-            <img src="${firstImage}"
-                 alt="${product.name}"
-                 onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}')">
-            <div class="suggestion-info">
-                <div class="suggestion-name">${highlightText(product.name, query)}</div>
-                <div class="suggestion-category">${formatCategoryName(product.category)}</div>
-                <div class="suggestion-price">$${product.price.toFixed(2)}</div>
-            </div>
-        </div>
-    `).join('');
-    
-    // Agregar evento de clic a las sugerencias
-    suggestionsContainer.querySelectorAll('.suggestion-item').forEach(item => {
-        item.addEventListener('click', function() {
-            const productId = parseInt(this.dataset.id);
-            searchInput.value = '';
-            hideSuggestions();
-            openProductDetail(productId);
-        });
-    });
-    
-    suggestionsContainer.classList.add('show');
-}
-
-function highlightText(text, query) {
-    const regex = new RegExp(`(${query})`, 'gi');
-    return text.replace(regex, '<mark>$1</mark>');
-}
-
-function handleSearchNavigation(e) {
-    const suggestions = document.querySelectorAll('.suggestion-item');
-    const activeSuggestion = document.querySelector('.suggestion-item.active');
-    let activeIndex = Array.from(suggestions).indexOf(activeSuggestion);
-    
-    switch(e.key) {
-        case 'ArrowDown':
-            e.preventDefault();
-            activeIndex = (activeIndex + 1) % suggestions.length;
-            setActiveSuggestion(suggestions, activeIndex);
-            break;
-            
-        case 'ArrowUp':
-            e.preventDefault();
-            activeIndex = (activeIndex - 1 + suggestions.length) % suggestions.length;
-            setActiveSuggestion(suggestions, activeIndex);
-            break;
-            
-        case 'Enter':
-            e.preventDefault();
-            if (activeSuggestion) {
-                activeSuggestion.click();
-            } else {
-                handleSearch();
-            }
-            break;
-            
-        case 'Escape':
-            hideSuggestions();
-            break;
-    }
-}
-
-function setActiveSuggestion(suggestions, index) {
-    suggestions.forEach(s => s.classList.remove('active'));
-    if (suggestions[index]) {
-        suggestions[index].classList.add('active');
-        suggestions[index].scrollIntoView({ block: 'nearest' });
-    }
-}
-
-function showSuggestions() {
-    const query = searchInput.value.trim();
-    if (query.length >= 2 && currentSuggestions.length > 0) {
-        document.querySelector('.search-suggestions').classList.add('show');
-    }
-}
-
-function hideSuggestions() {
-    // Pequeño delay para permitir clics en las sugerencias
-    setTimeout(() => {
-        document.querySelector('.search-suggestions')?.classList.remove('show');
-    }, 200);
-}
-
-// ========== VALIDACIÓN MEJORADA DE EMAIL ==========
-
-// Lista de dominios de email válidos
-const validDomains = [
-    'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com',
-    'protonmail.com', 'aol.com', 'live.com', 'msn.com', 'yandex.com',
-    'mail.com', 'zoho.com', 'gmx.com', 'hubspot.com', 'salesforce.com',
-    'company.com', 'empresa.com', 'business.com', 'correo.com'
-];
-
-// Dominios de prueba para desarrollo
-const testDomains = ['test.com', 'example.com', 'demo.com', 'prueba.com'];
-
-// Usuario de prueba predefinido
-const testUser = {
-    email: 'usuario@test.com',
-    password: 'test123',
-    name: 'Usuario de Prueba'
-};
-
-function isValidEmailDomain(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
-    if (!emailRegex.test(email)) {
-        return { isValid: false, message: 'Formato de email inválido' };
-    }
-    
-    const domain = email.split('@')[1].toLowerCase();
-    
-    // Permitir dominios de prueba en desarrollo
-    if (testDomains.includes(domain)) {
-        return { isValid: true, message: '' };
-    }
-    
-    // Validar dominio real
-    if (!validDomains.includes(domain)) {
-        return { 
-            isValid: false, 
-            message: 'Por favor, usa un proveedor de email válido (Gmail, Yahoo, Hotmail, etc.)' 
-        };
-    }
-    
-    return { isValid: true, message: '' };
-}
-
-function validateEmailReal(e) {
-    const input = e.target;
-    const errorElement = document.getElementById(input.id + '-error');
-    const email = input.value.trim();
-    
-    if (!email) {
-        showValidationError(input, errorElement, 'El correo electrónico es obligatorio');
-        return false;
-    }
-    
-    const domainValidation = isValidEmailDomain(email);
-    if (!domainValidation.isValid) {
-        showValidationError(input, errorElement, domainValidation.message);
-        return false;
-    }
-    
-    clearValidationError(input, errorElement);
-    return true;
-}
-
-// ========== INICIALIZACIÓN ==========
-
-document.addEventListener('DOMContentLoaded', function() {
-    loadData();
-    setupEventListeners();
-    loadCartFromStorage();
-    updateCartUI();
-    enhanceValidations();
-    setupPredictiveSearch();
-    setupImageErrorHandlers();
-    showTestUserInfo();
-    applyUrlFilters();
-});
-
-// Cargar datos
-async function loadData() {
-    showLoading(true);
-    
-    try {
-        const response = await fetch('data.json');
-        
-        if (response.ok) {
-            const data = await response.json();
-            products = data.products || backupProducts;
-        } else {
-            throw new Error('Error al cargar datos JSON');
-        }
-    } catch (error) {
-        console.warn('Error cargando datos JSON, usando datos de respaldo:', error);
-        products = backupProducts;
-    }
-    
-    renderAllProducts();
-    renderFilters();
-    updateResultsCount();
-    setupProductImageHover(); // ← AÑADIR ESTA LÍNEA
     showLoading(false);
 }
 
@@ -640,18 +456,17 @@ function createProductElement(product) {
     const productDiv = document.createElement('div');
     productDiv.className = 'product-card';
     
-    const firstImage = Array.isArray(product.images) ? product.images[0] : product.image;
-    const imagePath = firstImage || "https://via.placeholder.com/300x200";
+    const firstImage = getImagePath(product.images[0], product.name, product.category);
     
     productDiv.innerHTML = `
         <div class="product-image-container">
-            <img src="${imagePath}" 
+            <img src="${firstImage}" 
                  alt="${product.name} - ${formatCategoryName(product.category)}" 
                  class="product-image"
-                 onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}')"
+                 onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}', '${product.category}')"
                  title="${product.name} - ${product.description}">
-            <div class="image-indicator" style="display: ${Array.isArray(product.images) && product.images.length > 1 ? 'block' : 'none'};">
-                ${Array.isArray(product.images) ? product.images.length : 1} imágenes
+            <div class="image-indicator" style="display: ${product.images.length > 1 ? 'block' : 'none'};">
+                ${product.images.length} imágenes
             </div>
             <div data-category="${product.category}" style="display: none;"></div>
         </div>
@@ -926,7 +741,7 @@ function addToCart(productId) {
             id: product.id,
             name: product.name,
             price: product.price,
-            image: product.images ? product.images[0] : product.image,
+            image: getImagePath(product.images[0], product.name, product.category),
             quantity: 1
         });
         showSuccessMessage(`${product.name} añadido al carrito`);
@@ -980,13 +795,11 @@ function updateCartUI() {
         const itemTotal = item.price * item.quantity;
         total += itemTotal;
         
-        const imagePath = item.image;
-        
         const cartItem = document.createElement('div');
         cartItem.className = 'cart-item';
         cartItem.innerHTML = `
-            <img src="${imagePath}" alt="${item.name}" class="cart-item-image"
-                 onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}')">
+            <img src="${item.image}" alt="${item.name}" class="cart-item-image"
+                 onerror="handleImageError(this, '${item.name.replace(/'/g, "\\'")}')">
             <div class="cart-item-details">
                 <h4 class="cart-item-title">${item.name}</h4>
                 <div class="cart-item-price">$${item.price.toFixed(2)}</div>
@@ -1204,7 +1017,7 @@ function openProductDetail(productId) {
     const product = products.find(p => p.id === productId);
     if (!product) return;
     
-    const productImages = Array.isArray(product.images) ? product.images : [product.image];
+    const productImages = product.images.map(img => getImagePath(img, product.name, product.category));
     const mainImagePath = productImages[0];
     
     productDetail.innerHTML = `
@@ -1212,7 +1025,7 @@ function openProductDetail(productId) {
             <div class="product-detail-main">
                 <div class="product-image-gallery">
                     <img src="${mainImagePath}" alt="${product.name}" class="product-detail-image active"
-                         onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}')">
+                         onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}', '${product.category}')">
                     ${productImages.length > 1 ? `
                     <div class="image-thumbnails">
                         ${productImages.map((img, index) => `
@@ -1220,7 +1033,7 @@ function openProductDetail(productId) {
                                  alt="${product.name} - Vista ${index + 1}"
                                  class="thumbnail ${index === 0 ? 'active' : ''}"
                                  data-index="${index}"
-                                 onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}')">
+                                 onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}', '${product.category}')">
                         `).join('')}
                     </div>
                     ` : ''}
@@ -1260,7 +1073,7 @@ function openProductDetail(productId) {
                 // Añadir clase active a la miniatura clickeada
                 this.classList.add('active');
                 // Cambiar imagen principal
-                const newImagePath = getImagePath(productImages[this.dataset.index], product.name, product.category);
+                const newImagePath = productImages[this.dataset.index];
                 mainImage.style.opacity = '0.7';
                 setTimeout(() => {
                     mainImage.src = newImagePath;
@@ -1382,6 +1195,71 @@ function enhanceValidations() {
     });
 }
 
+// ========== VALIDACIÓN MEJORADA DE EMAIL ==========
+
+// Lista de dominios de email válidos
+const validDomains = [
+    'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com',
+    'protonmail.com', 'aol.com', 'live.com', 'msn.com', 'yandex.com',
+    'mail.com', 'zoho.com', 'gmx.com', 'hubspot.com', 'salesforce.com',
+    'company.com', 'empresa.com', 'business.com', 'correo.com'
+];
+
+// Dominios de prueba para desarrollo
+const testDomains = ['test.com', 'example.com', 'demo.com', 'prueba.com'];
+
+// Usuario de prueba predefinido
+const testUser = {
+    email: 'usuario@test.com',
+    password: 'test123',
+    name: 'Usuario de Prueba'
+};
+
+function isValidEmailDomain(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if (!emailRegex.test(email)) {
+        return { isValid: false, message: 'Formato de email inválido' };
+    }
+    
+    const domain = email.split('@')[1].toLowerCase();
+    
+    // Permitir dominios de prueba en desarrollo
+    if (testDomains.includes(domain)) {
+        return { isValid: true, message: '' };
+    }
+    
+    // Validar dominio real
+    if (!validDomains.includes(domain)) {
+        return { 
+            isValid: false, 
+            message: 'Por favor, usa un proveedor de email válido (Gmail, Yahoo, Hotmail, etc.)' 
+        };
+    }
+    
+    return { isValid: true, message: '' };
+}
+
+function validateEmailReal(e) {
+    const input = e.target;
+    const errorElement = document.getElementById(input.id + '-error');
+    const email = input.value.trim();
+    
+    if (!email) {
+        showValidationError(input, errorElement, 'El correo electrónico es obligatorio');
+        return false;
+    }
+    
+    const domainValidation = isValidEmailDomain(email);
+    if (!domainValidation.isValid) {
+        showValidationError(input, errorElement, domainValidation.message);
+        return false;
+    }
+    
+    clearValidationError(input, errorElement);
+    return true;
+}
+
 function validateEmail(e) {
     const input = e.target;
     const errorElement = document.getElementById(input.id + '-error');
@@ -1485,6 +1363,160 @@ function clearFormErrors() {
     });
 }
 
+// ========== BÚSQUEDA PREDICTIVA ==========
+
+let searchTimeout;
+let currentSuggestions = [];
+
+function setupPredictiveSearch() {
+    const searchInput = document.getElementById('search-input');
+    const searchContainer = searchInput.parentElement;
+    
+    // Crear contenedor de sugerencias
+    const suggestionsContainer = document.createElement('div');
+    suggestionsContainer.className = 'search-suggestions';
+    searchContainer.appendChild(suggestionsContainer);
+    
+    // Event listeners mejorados
+    searchInput.addEventListener('input', handleSearchInput);
+    searchInput.addEventListener('focus', showSuggestions);
+    searchInput.addEventListener('blur', hideSuggestions);
+    
+    // Navegación con teclado
+    searchInput.addEventListener('keydown', handleSearchNavigation);
+}
+
+function handleSearchInput(e) {
+    const query = e.target.value.trim();
+    
+    clearTimeout(searchTimeout);
+    
+    if (query.length < 2) {
+        hideSuggestions();
+        return;
+    }
+    
+    searchTimeout = setTimeout(() => {
+        searchProducts(query);
+    }, 300);
+}
+
+function searchProducts(query) {
+    const searchTerm = query.toLowerCase();
+    
+    // Búsqueda en productos cargados
+    const results = products.filter(product => {
+        const nameMatch = product.name.toLowerCase().includes(searchTerm);
+        const descMatch = product.description.toLowerCase().includes(searchTerm);
+        const categoryMatch = product.category.toLowerCase().includes(searchTerm);
+        const brandMatch = product.brand.toLowerCase().includes(searchTerm);
+        
+        return nameMatch || descMatch || categoryMatch || brandMatch;
+    }).slice(0, 8); // Limitar a 8 resultados
+    
+    currentSuggestions = results;
+    displaySuggestions(results, query);
+}
+
+function displaySuggestions(suggestions, query) {
+    const suggestionsContainer = document.querySelector('.search-suggestions');
+    
+    if (suggestions.length === 0) {
+        suggestionsContainer.innerHTML = `
+            <div class="suggestion-item no-results">
+                <span>No se encontraron productos para "${query}"</span>
+            </div>
+        `;
+        suggestionsContainer.classList.add('show');
+        return;
+    }
+    
+    suggestionsContainer.innerHTML = suggestions.map(product => `
+        <div class="suggestion-item" data-id="${product.id}">
+            <img src="${getImagePath(product.images[0], product.name, product.category)}"
+                 alt="${product.name}"
+                 onerror="handleImageError(this, '${product.name.replace(/'/g, "\\'")}', '${product.category}')">
+            <div class="suggestion-info">
+                <div class="suggestion-name">${highlightText(product.name, query)}</div>
+                <div class="suggestion-category">${formatCategoryName(product.category)}</div>
+                <div class="suggestion-price">$${product.price.toFixed(2)}</div>
+            </div>
+        </div>
+    `).join('');
+    
+    // Agregar evento de clic a las sugerencias
+    suggestionsContainer.querySelectorAll('.suggestion-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const productId = parseInt(this.dataset.id);
+            searchInput.value = '';
+            hideSuggestions();
+            openProductDetail(productId);
+        });
+    });
+    
+    suggestionsContainer.classList.add('show');
+}
+
+function highlightText(text, query) {
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.replace(regex, '<mark>$1</mark>');
+}
+
+function handleSearchNavigation(e) {
+    const suggestions = document.querySelectorAll('.suggestion-item');
+    const activeSuggestion = document.querySelector('.suggestion-item.active');
+    let activeIndex = Array.from(suggestions).indexOf(activeSuggestion);
+    
+    switch(e.key) {
+        case 'ArrowDown':
+            e.preventDefault();
+            activeIndex = (activeIndex + 1) % suggestions.length;
+            setActiveSuggestion(suggestions, activeIndex);
+            break;
+            
+        case 'ArrowUp':
+            e.preventDefault();
+            activeIndex = (activeIndex - 1 + suggestions.length) % suggestions.length;
+            setActiveSuggestion(suggestions, activeIndex);
+            break;
+            
+        case 'Enter':
+            e.preventDefault();
+            if (activeSuggestion) {
+                activeSuggestion.click();
+            } else {
+                handleSearch();
+            }
+            break;
+            
+        case 'Escape':
+            hideSuggestions();
+            break;
+    }
+}
+
+function setActiveSuggestion(suggestions, index) {
+    suggestions.forEach(s => s.classList.remove('active'));
+    if (suggestions[index]) {
+        suggestions[index].classList.add('active');
+        suggestions[index].scrollIntoView({ block: 'nearest' });
+    }
+}
+
+function showSuggestions() {
+    const query = searchInput.value.trim();
+    if (query.length >= 2 && currentSuggestions.length > 0) {
+        document.querySelector('.search-suggestions').classList.add('show');
+    }
+}
+
+function hideSuggestions() {
+    // Pequeño delay para permitir clics en las sugerencias
+    setTimeout(() => {
+        document.querySelector('.search-suggestions')?.classList.remove('show');
+    }, 200);
+}
+
 // ========== UTILIDADES ==========
 
 function isValidEmail(email) {
@@ -1573,6 +1605,6 @@ function setupEventListeners() {
         }
     });
 
+    // Configurar búsqueda predictiva
+    setupPredictiveSearch();
 }
-
-
