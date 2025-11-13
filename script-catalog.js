@@ -231,18 +231,23 @@ const productDetail = document.getElementById('product-detail');
 /**
  * Función simplificada para obtener la ruta de imagen
  */
-function getImagePath(imagePath, productName) {
-    // Si ya es una ruta completa, usarla directamente
-    if (imagePath && (imagePath.includes('/') || imagePath.includes('\\'))) {
-        return imagePath;
-    }
-    
+function getImagePath(imagePath, productName, category) {
     // Si no hay imagen, usar placeholder
     if (!imagePath) {
         return `https://via.placeholder.com/300x200/393E46/EAEAEA?text=${encodeURIComponent(productName)}`;
     }
     
-    // Para nombres simples, asumir que están en imagenes/products/
+    // Si ya es una URL completa (http/https), usarla directamente
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+        return imagePath;
+    }
+    
+    // Si ya incluye la carpeta completa, usarla
+    if (imagePath.includes('imagenes/') || imagePath.includes('/')) {
+        return imagePath;
+    }
+    
+    // Para nombres simples, construir la ruta completa
     return `imagenes/products/${imagePath}`;
 }
 
@@ -1597,4 +1602,5 @@ function setupEventListeners() {
             closeProductDetail();
         }
     });
+
 }
